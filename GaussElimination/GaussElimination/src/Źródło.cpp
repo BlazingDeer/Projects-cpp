@@ -263,7 +263,7 @@ public:
 		if(BasicMatrix[n - 1][n - 1]) BasicGaussWyniki[n - 1] = BasicMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1];
 		else
 		{
-			std::cout << "\nBlad! Macierz ma nieskonczenie wiele rozwiazan BasicMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
+			std::cout << "\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n BasicMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
 			FreeMatrix(BasicMatrix, BasicMatrixValues);
 			return;
 		}
@@ -273,6 +273,12 @@ public:
 			{
 				BasicMatrixValues[i] -= BasicMatrix[i][k] * BasicGaussWyniki[k];
 				BasicMatrix[k] = 0;
+			}
+			if (BasicMatrix[i][i] == 0)
+			{
+				std::cout << "\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n";
+				FreeMatrix(BasicMatrix, BasicMatrixValues);
+				return;
 			}
 			BasicGaussWyniki[i]= BasicMatrixValues[i] / BasicMatrix[i][i];
 		}
@@ -330,7 +336,7 @@ public:
 		if (IntermediateMatrix[n - 1][n - 1]) IntermediateGaussWyniki[n - 1] = IntermediateMatrixValues[n - 1] / IntermediateMatrix[n - 1][n - 1];
 		else
 		{
-			std::cout << "\nBlad! Macierz ma nieskonczenie wiele rozwiazan IntermediateMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
+			std::cout << "\n\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n IntermediateMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
 			FreeMatrix(IntermediateMatrix, IntermediateMatrixValues);
 			return;
 		}
@@ -340,6 +346,12 @@ public:
 			{
 				IntermediateMatrixValues[i] -= IntermediateMatrix[i][k] * IntermediateGaussWyniki[k];
 				IntermediateMatrix[k] = 0;
+			}
+			if (IntermediateMatrix[i][i] == 0)
+			{
+				std::cout << "\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n";
+				FreeMatrix(IntermediateMatrix, IntermediateMatrixValues);
+				return;
 			}
 			IntermediateGaussWyniki[i] = IntermediateMatrixValues[i] / IntermediateMatrix[i][i];
 		}
@@ -398,17 +410,24 @@ public:
 		if (EndV)
 		{
 			FreeMatrix(AdvancedMatrix, AdvancedMatrixValues);
+			free(XOrder);
 			return;
 		}
 
 		ShowMatrix(AdvancedMatrix, AdvancedMatrixValues);
-		if (AdvancedMatrix[n - 1][n - 1]) AdvancedGaussWyniki[n - 1] = AdvancedMatrixValues[n - 1] / AdvancedMatrix[n - 1][n - 1];
+		if (AdvancedMatrix[n - 1][n - 1])
+		{
+			AdvancedGaussWyniki[n - 1] = AdvancedMatrixValues[n - 1] / AdvancedMatrix[n - 1][n - 1];
+			if (abs(AdvancedGaussWyniki[n - 1]) < 1e-12) AdvancedGaussWyniki[n - 1] = 0;
+		}
 		else
 		{
-			std::cout << "\nBlad! Macierz ma nieskonczenie wiele rozwiazan AdvancedMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
+			std::cout << "\n\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n AdvancedMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
 			FreeMatrix(AdvancedMatrix, AdvancedMatrixValues);
+			free(XOrder);
 			return;
 		}
+		if (abs(AdvancedGaussWyniki[n - 1]) < 1e-12) AdvancedGaussWyniki[n - 1] = 0;
 		for (int i = n - 2; i >= 0; i--)
 		{
 			for (int k = n - 1; k > i; k--)
@@ -416,7 +435,15 @@ public:
 				AdvancedMatrixValues[i] -= AdvancedMatrix[i][k] * AdvancedGaussWyniki[k];
 				AdvancedMatrix[k] = 0;
 			}
+			if (AdvancedMatrix[i][i] == 0)
+			{
+				std::cout << "\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n";
+				FreeMatrix(AdvancedMatrix, AdvancedMatrixValues);
+				free(XOrder);
+				return;
+			}
 			AdvancedGaussWyniki[i] = AdvancedMatrixValues[i] / AdvancedMatrix[i][i];
+			if (abs(AdvancedGaussWyniki[i]) < 1e-12) AdvancedGaussWyniki[i] = 0;
 		}
 
 		std::cout << "\nWYPISUJE WARTOSCI POSZCZEGOLNYCH ZMIENNYCH!\nUWAGA NA ZMIANE KOLEJNOSCI Xn!!\n";
