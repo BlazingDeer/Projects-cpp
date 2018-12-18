@@ -337,7 +337,7 @@ public:
 		if (IntermediateMatrix[n - 1][n - 1]) IntermediateGaussWyniki[n - 1] = IntermediateMatrixValues[n - 1] / IntermediateMatrix[n - 1][n - 1];
 		else
 		{
-			std::cout << "\n\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n IntermediateMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
+			std::cout << "\n\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n IntermediateMatrixValues[n - 1] / IntermediateMatrix[n - 1][n - 1]==0\n";
 			FreeMatrix(IntermediateMatrix, IntermediateMatrixValues);
 			return;
 		}
@@ -423,7 +423,7 @@ public:
 		}
 		else
 		{
-			std::cout << "\n\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n AdvancedMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
+			std::cout << "\n\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n AdvancedMatrixValues[n - 1] / AdvancedMatrix[n - 1][n - 1]==0\n";
 			FreeMatrix(AdvancedMatrix, AdvancedMatrixValues);
 			free(XOrder);
 			return;
