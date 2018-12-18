@@ -12,6 +12,7 @@ private:
 	double  *matrixValues;
 	double *BasicGaussWyniki;
 	double *IntermediateGaussWyniki;
+	double *AdvancedGaussWyniki;
 public:
 
 
@@ -35,6 +36,7 @@ public:
 		free(matrixValues);
 		free(BasicGaussWyniki);
 		free(IntermediateGaussWyniki);
+		free(AdvancedGaussWyniki);
 	}
 
 
@@ -50,6 +52,7 @@ public:
 		matrixValues = (double *)(calloc(n, sizeof(double)));
 		BasicGaussWyniki = (double *)(calloc(n, sizeof(double)));
 		IntermediateGaussWyniki = (double *)(calloc(n, sizeof(double)));
+		AdvancedGaussWyniki = (double *)(calloc(n, sizeof(double)));
 	}
 
 	void FreeMatrix(double **TempMatrix, double *TempMatrixValues)
@@ -73,7 +76,7 @@ public:
 
 	}
 
-	void CopyMatrix(double **NewMatrix, double *NewValues)
+	void CopyMatrix(double**& NewMatrix, double*& NewValues)
 	{
 		
 
@@ -87,7 +90,7 @@ public:
 		}
 	}
 
-	void MaxColumnSwap(double **TempMatrix, double *TempMatrixValues, int przekatna)
+	void MaxColumnSwap(double**& TempMatrix, double*& TempMatrixValues, int przekatna)
 	{
 		double MaxElement= TempMatrix[przekatna][przekatna];
 		int MaxElementVerticalIndex=przekatna;
@@ -103,16 +106,67 @@ public:
 
 		for (int i = 0; i < n; i++)
 		{
-			double CopyColumn;
-			CopyColumn = TempMatrix[przekatna][i];
+			double CopyLine;
+			CopyLine = TempMatrix[przekatna][i];
 			TempMatrix[przekatna][i] = TempMatrix[MaxElementVerticalIndex][i];
-			TempMatrix[MaxElementVerticalIndex][i] = CopyColumn;
+			TempMatrix[MaxElementVerticalIndex][i] = CopyLine;
 
-			CopyColumn = TempMatrixValues[przekatna];
-			TempMatrixValues[przekatna] = TempMatrixValues[MaxElementVerticalIndex];
-			TempMatrixValues[MaxElementVerticalIndex] = CopyColumn;
 		}
 
+		double CopyValue;
+		CopyValue = TempMatrixValues[przekatna];
+		TempMatrixValues[przekatna] = TempMatrixValues[MaxElementVerticalIndex];
+		TempMatrixValues[MaxElementVerticalIndex] = CopyValue;
+
+
+
+	}
+
+	void MaxMatrixSwap(double**& TempMatrix, double*& TempMatrixValues, int*& XOrder, int przekatna)
+	{
+		double MaxElement = TempMatrix[przekatna][przekatna];
+		int MaxElementVerticalIndex = przekatna;
+		int MaxElementHorizontalIndex = przekatna;
+
+		for (int i = przekatna; i < n; i++)
+		{
+			for (int k = przekatna; k < n; k++)
+			{
+				if (abs(TempMatrix[i][k]) > MaxElement)
+				{
+					MaxElement = TempMatrix[i][k];
+					MaxElementVerticalIndex = i;
+					MaxElementHorizontalIndex = k;
+				}
+			}
+			
+		}
+
+		for (int i = 0; i < n; i++) //Zamiana Wierszy
+		{
+			double CopyLine;
+			CopyLine = TempMatrix[przekatna][i];
+			TempMatrix[przekatna][i] = TempMatrix[MaxElementVerticalIndex][i];
+			TempMatrix[MaxElementVerticalIndex][i] = CopyLine;
+		}
+		double CopyValue;
+		CopyValue = TempMatrixValues[przekatna];
+		TempMatrixValues[przekatna] = TempMatrixValues[MaxElementVerticalIndex];
+		TempMatrixValues[MaxElementVerticalIndex] = CopyValue;
+
+		for (int i = 0; i < n; i++) //Zamiana Kolumn
+		{
+			double CopyColumn;
+			CopyColumn = TempMatrix[i][przekatna];
+			TempMatrix[i][przekatna] = TempMatrix[i][MaxElementHorizontalIndex];
+			TempMatrix[i][MaxElementHorizontalIndex] = CopyColumn;
+
+		}
+
+		int temp;
+		temp = XOrder[przekatna];
+		XOrder[przekatna] = XOrder[MaxElementHorizontalIndex];
+		XOrder[MaxElementHorizontalIndex] = temp;
 
 
 	}
@@ -273,10 +327,10 @@ public:
 		}
 		
 		ShowMatrix(IntermediateMatrix, IntermediateMatrixValues);
-		if (IntermediateMatrix[n - 1][n - 1]) BasicGaussWyniki[n - 1] = IntermediateMatrixValues[n - 1] / IntermediateMatrix[n - 1][n - 1];
+		if (IntermediateMatrix[n - 1][n - 1]) IntermediateGaussWyniki[n - 1] = IntermediateMatrixValues[n - 1] / IntermediateMatrix[n - 1][n - 1];
 		else
 		{
-			std::cout << "\nBlad! Macierz ma nieskonczenie wiele rozwiazan BasicMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
+			std::cout << "\nBlad! Macierz ma nieskonczenie wiele rozwiazan IntermediateMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
 			FreeMatrix(IntermediateMatrix, IntermediateMatrixValues);
 			return;
 		}
@@ -284,7 +338,7 @@ public:
 		{
 			for (int k = n - 1; k > i; k--)
 			{
-				IntermediateMatrixValues[i] -= IntermediateMatrix[i][k] * BasicGaussWyniki[k];
+				IntermediateMatrixValues[i] -= IntermediateMatrix[i][k] * IntermediateGaussWyniki[k];
 				IntermediateMatrix[k] = 0;
 			}
 			IntermediateGaussWyniki[i] = IntermediateMatrixValues[i] / IntermediateMatrix[i][i];
@@ -292,9 +346,86 @@ public:
 
 		for (int i = 0; i < n; i++)
 		{
-			std::cout << "\nX" << i << "=" << BasicGaussWyniki[i];
+			std::cout << "\nX" << i << "=" << IntermediateGaussWyniki[i];
 		}
 		FreeMatrix(IntermediateMatrix, IntermediateMatrixValues);
+	}
+
+
+	void AdvancedGauss()
+	{
+		std::cout << "\n\nGauss z PELNYM wyborem Maksymalnego elementu w kolumnie";
+		double **AdvancedMatrix = nullptr;
+		double *AdvancedMatrixValues = nullptr;
+		int* XOrder = (int*)calloc(n, sizeof(int));
+
+		for (int i = 0; i < n; i++)
+		{
+			XOrder[i] = i;
+		}
+
+		CreateMatrix(AdvancedMatrix, AdvancedMatrixValues);
+
+		bool EndV = false;
+		CopyMatrix(AdvancedMatrix, AdvancedMatrixValues);
+		for (int i = 0; i < n - 1; i++)
+		{
+			MaxMatrixSwap(AdvancedMatrix, AdvancedMatrixValues,XOrder, i);
+			if (AdvancedMatrix[i][i] == 0)
+			{
+				std::cout << "\nBlad wartosc po przekatnej rowna 0!";
+				EndV = true;
+				break;
+
+			}
+
+			for (int wdol = i + 1; wdol < n; wdol++)
+			{
+				double temp = AdvancedMatrix[wdol][i] / AdvancedMatrix[i][i];
+
+				for (int wbok = i; wbok < n; wbok++)
+				{
+					AdvancedMatrix[wdol][wbok] -= AdvancedMatrix[i][wbok] * temp;
+
+					if (abs(AdvancedMatrix[wdol][wbok]) <= 1e-12) AdvancedMatrix[wdol][wbok] = 0;
+
+				}
+
+				AdvancedMatrixValues[wdol] -= temp * AdvancedMatrixValues[i];
+
+			}
+		}
+		if (EndV)
+		{
+			FreeMatrix(AdvancedMatrix, AdvancedMatrixValues);
+			return;
+		}
+
+		ShowMatrix(AdvancedMatrix, AdvancedMatrixValues);
+		if (AdvancedMatrix[n - 1][n - 1]) AdvancedGaussWyniki[n - 1] = AdvancedMatrixValues[n - 1] / AdvancedMatrix[n - 1][n - 1];
+		else
+		{
+			std::cout << "\nBlad! Macierz ma nieskonczenie wiele rozwiazan AdvancedMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
+			FreeMatrix(AdvancedMatrix, AdvancedMatrixValues);
+			return;
+		}
+		for (int i = n - 2; i >= 0; i--)
+		{
+			for (int k = n - 1; k > i; k--)
+			{
+				AdvancedMatrixValues[i] -= AdvancedMatrix[i][k] * AdvancedGaussWyniki[k];
+				AdvancedMatrix[k] = 0;
+			}
+			AdvancedGaussWyniki[i] = AdvancedMatrixValues[i] / AdvancedMatrix[i][i];
+		}
+
+		std::cout << "\nWYPISUJE WARTOSCI POSZCZEGOLNYCH ZMIENNYCH!\nUWAGA NA ZMIANE KOLEJNOSCI Xn!!\n";
+		for (int i = 0; i < n; i++)
+		{
+			std::cout << "\nX" << XOrder[i] << "=" << AdvancedGaussWyniki[i];
+		}
+		FreeMatrix(AdvancedMatrix, AdvancedMatrixValues);
+		free(XOrder);
 	}
 	
 };
@@ -305,6 +436,7 @@ int main()
 	GaussElimination matrix;
 	matrix.BasicGaussElimination();
 	matrix.IntermediateGauss();
+	matrix.AdvancedGauss();
 
 
 
