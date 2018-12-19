@@ -15,12 +15,57 @@ private:
 	double *AdvancedGaussWyniki;
 public:
 
+	//ZESTAWY TESTOWE
+	//Oznaczone
+	std::vector<std::vector<double>> zt1{ {0,1,2,3}, {1 ,0 ,1 ,2}, {1,2,3,4}, {0,1, 3, 2} };
+	std::vector<double> zt1wyniki{ 8,4,10,7 };
+
+	std::vector<std::vector<double>> zt2{ {2, 4 ,2 ,0}, {1, 0, -1, 1}, {0,1,3,-1},{2,1,2,1} };
+	std::vector<double> zt2wyniki{ 4,2,0,6 };
+
+	std::vector<std::vector<double>> zt3{ {6,-2,2,4},{12,-8,6,10},{3,-13,9,3},{-6,4,1,-18} };
+	std::vector<double> zt3wyniki{ 12,34,27,-38 };
+
+	std::vector<std::vector<double>> zt4{ {1,1,0,1,-3},{2,0,-1,0,-2},{1,-1,-2,1,-2},{2,0,1,0,1},{-3,-1,1,2,2} };
+	std::vector<double> zt4wyniki{ 1,1,1,-1,1 };
+	//Nieoznaczone
+	std::vector<std::vector<double>> zt5{ {1,3,2},{2,-1,1},{3,2,3} };
+	std::vector<double> zt5wyniki{ 0,1,1 };
+	
+	std::vector<std::vector<double>> zt6{ {3,-1,2},{1,2,-1},{4,1,1} };
+	std::vector<double> zt6wyniki{ 1,2,3 };
+	//Sprzeczne
+	std::vector<std::vector<double>> zt7{ {1,2,3,1},{1,1,1,1},{2,-4,-1,2},{3,6,10,3} };
+	std::vector<double> zt7wyniki{ 1,0,2,2 };
+
+	std::vector<std::vector<double>> zt8{ {2,4,0,-6}, {1,-5,3,-1}, {3,2,-1,2}, {6,1,2,-5} };
+	std::vector<double> zt8wyniki{ 1,-3,9,22 };
+
+
+
+
+	GaussElimination(int wybor)
+	{
+		switch (wybor)
+		{
+		case 1:
+			n = 0;
+			CreateFirst();
+			EnterMatrix();
+			ShowMatrix(matrix, matrixValues);
+			break;
+		case 2:
+
+		}
+	}
 
 	GaussElimination()
 	{
+		n = 0;
 		CreateFirst();
 		EnterMatrix();
-		ShowMatrix(matrix,matrixValues);
+		ShowMatrix(matrix, matrixValues);
+
 	}
 
 
@@ -39,11 +84,93 @@ public:
 		free(AdvancedGaussWyniki);
 	}
 
+	void Choose()
+	{
+		system("cls");
+		std::cout << "\n\nWybierz zestaw:\n";
+		std::cout << "Zestaw 1\n";
+		VectorShowMatrix(zt1, zt1wyniki);
+		
+		std::cout << "\n\nZestaw 2\n";
+
+		VectorShowMatrix(zt2, zt2wyniki);
+
+
+		std::cout << "\n\nZestaw 3\n";
+		VectorShowMatrix(zt3, zt3wyniki);
+		std::cout << "\n\nZestaw 4\n";
+		VectorShowMatrix(zt4, zt4wyniki);
+		std::cout << "\n\nZestaw 5\n";
+		VectorShowMatrix(zt5, zt5wyniki);
+		std::cout << "\n\nZestaw 6\n";
+		VectorShowMatrix(zt6, zt6wyniki);
+		std::cout << "\n\nZestaw 7\n";
+		VectorShowMatrix(zt7, zt7wyniki);
+		std::cout << "\n\nZestaw 8\n";
+		VectorShowMatrix(zt8, zt8wyniki);
+		switch (i)
+		{
+		case 1:
+			n = 4;
+			CopySet(zt1, zt1wyniki);
+			break;
+		case 2:
+			n = 4;
+			CopySet(zt2, zt2wyniki);
+			break;
+		case 3:
+			n = 4;
+			CopySet(zt3, zt3wyniki);
+			break;
+		case 4:
+			n = 5;
+			CopySet(zt4, zt4wyniki);
+			break;
+		case 5:
+			n = 3;
+			CopySet(zt5, zt5wyniki);
+			break;
+		case 6:
+			n = 3;
+			CopySet(zt6, zt6wyniki);
+			break;
+		case 7:
+			n = 4;
+			CopySet(zt7, zt7wyniki);
+			break;
+		case 8:
+			n = 4;
+			CopySet(zt8, zt8wyniki);
+			break;
+		default:
+			std::cout << "Blad! Wybrano zly zestaw";
+			system("pause");
+			exit(0);
+		}
+	}
+
+	void CopySet(std::vector<std::vector<double>> Set, std::vector<double> SetValues)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			for (int k = 0; k < n; k++)
+			{
+				matrix[i][k] = Set[i][k];
+			}
+			matrixValues[i] = SetValues[i];
+		}
+
+	}
+
 
 	void CreateFirst()
 	{
-		std::cout << "\nWprowadz stopien macierzy: n= ";
-		std::cin >> n;
+
+		if (n == 0)
+		{
+			std::cout << "\nWprowadz stopien macierzy: n= ";
+			std::cin >> n;
+		}
 		matrix = (double**)calloc(n, sizeof(double*));
 		for (int i = 0; i < n; ++i)
 		{
@@ -212,6 +339,23 @@ public:
 			}
 			std::cout << "        |" << "|"<<std::setw(8) << values[i];
 			
+		}
+		std::cout << "\n";
+	}
+
+	void VectorShowMatrix(std::vector<std::vector<double>> toshow, std::vector<double> values)
+	{
+
+		for (int i = 0; i < values.size(); i++)
+		{
+
+			std::cout << "\n| ";
+			for (int k = 0; k < values.size(); k++)
+			{
+				std::cout << std::setw(8) << std::setprecision(4) << toshow[i][k];
+			}
+			std::cout << "        |" << "|" << std::setw(8) << values[i];
+
 		}
 		std::cout << "\n";
 	}
