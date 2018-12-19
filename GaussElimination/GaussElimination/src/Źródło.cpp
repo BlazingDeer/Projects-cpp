@@ -55,6 +55,13 @@ public:
 			ShowMatrix(matrix, matrixValues);
 			break;
 		case 2:
+			Choose();
+			break;
+		default:
+			std::cout << "\nBlad!\n";
+			system("pause");
+			exit(0);
+			
 
 		}
 	}
@@ -88,6 +95,7 @@ public:
 	{
 		system("cls");
 		std::cout << "\n\nWybierz zestaw:\n";
+		std::cout << "OZNACZONE\n";
 		std::cout << "Zestaw 1\n";
 		VectorShowMatrix(zt1, zt1wyniki);
 		
@@ -100,46 +108,59 @@ public:
 		VectorShowMatrix(zt3, zt3wyniki);
 		std::cout << "\n\nZestaw 4\n";
 		VectorShowMatrix(zt4, zt4wyniki);
+		std::cout << "\nNIEOZNACZONE\n";
 		std::cout << "\n\nZestaw 5\n";
 		VectorShowMatrix(zt5, zt5wyniki);
 		std::cout << "\n\nZestaw 6\n";
 		VectorShowMatrix(zt6, zt6wyniki);
+		std::cout << "\nSPRZECZNE\n";
 		std::cout << "\n\nZestaw 7\n";
 		VectorShowMatrix(zt7, zt7wyniki);
 		std::cout << "\n\nZestaw 8\n";
 		VectorShowMatrix(zt8, zt8wyniki);
+		std::cout << "\nWybor:";
+		int i;
+		std::cin >> i;
 		switch (i)
 		{
 		case 1:
 			n = 4;
+			CreateFirst();
 			CopySet(zt1, zt1wyniki);
 			break;
 		case 2:
 			n = 4;
+			CreateFirst();
 			CopySet(zt2, zt2wyniki);
 			break;
 		case 3:
 			n = 4;
+			CreateFirst();
 			CopySet(zt3, zt3wyniki);
 			break;
 		case 4:
 			n = 5;
+			CreateFirst();
 			CopySet(zt4, zt4wyniki);
 			break;
 		case 5:
 			n = 3;
+			CreateFirst();
 			CopySet(zt5, zt5wyniki);
 			break;
 		case 6:
 			n = 3;
+			CreateFirst();
 			CopySet(zt6, zt6wyniki);
 			break;
 		case 7:
 			n = 4;
+			CreateFirst();
 			CopySet(zt7, zt7wyniki);
 			break;
 		case 8:
 			n = 4;
+			CreateFirst();
 			CopySet(zt8, zt8wyniki);
 			break;
 		default:
@@ -405,11 +426,25 @@ public:
 		}
 		
 		ShowMatrix(BasicMatrix, BasicMatrixValues);
-		if(BasicMatrix[n - 1][n - 1]) BasicGaussWyniki[n - 1] = BasicMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1];
-		else
+		
+
+		if (BasicMatrix[n - 1][n - 1])
 		{
-			std::cout << "\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n BasicMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1]==0\n";
+			BasicGaussWyniki[n - 1] = BasicMatrixValues[n - 1] / BasicMatrix[n - 1][n - 1];
+			if (abs(BasicGaussWyniki[n - 1]) < 1e-12) BasicGaussWyniki[n - 1] = 0;
+		}
+		else if (BasicMatrixValues[n - 1] == 0)
+		{
+			std::cout << "\n\nRozwiazan jest nieskonczenie wiele.\n BasicMatrixValues[n - 1]==0 AND BasicMatrix[n - 1][n - 1]==0\n";
 			FreeMatrix(BasicMatrix, BasicMatrixValues);
+			
+			return;
+		}
+		else if (BasicMatrixValues[n - 1] != 0)
+		{
+			std::cout << "\n\nUklad sprzeczny!\n BasicMatrixValues[n - 1]!=0  AND BasicMatrix[n - 1][n - 1]==0\n";
+			FreeMatrix(BasicMatrix, BasicMatrixValues);
+			
 			return;
 		}
 		for (int i = n - 2; i >= 0; i--)
@@ -437,7 +472,7 @@ public:
 
 	void IntermediateGauss()
 	{
-		std::cout << "\n\nGauss z wyborem Maksymalnego elementu w kolumnie";
+		std::cout << "\n\n\nGauss z wyborem Maksymalnego elementu w kolumnie";
 		double **IntermediateMatrix = nullptr;
 		double *IntermediateMatrixValues = nullptr;
 		CreateMatrix(IntermediateMatrix, IntermediateMatrixValues);
@@ -478,13 +513,24 @@ public:
 		}
 		
 		ShowMatrix(IntermediateMatrix, IntermediateMatrixValues);
-		if (IntermediateMatrix[n - 1][n - 1]) IntermediateGaussWyniki[n - 1] = IntermediateMatrixValues[n - 1] / IntermediateMatrix[n - 1][n - 1];
-		else
+		if (IntermediateMatrix[n - 1][n - 1])
 		{
-			std::cout << "\n\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n IntermediateMatrixValues[n - 1] / IntermediateMatrix[n - 1][n - 1]==0\n";
+			IntermediateGaussWyniki[n - 1] = IntermediateMatrixValues[n - 1] / IntermediateMatrix[n - 1][n - 1];
+			if (abs(IntermediateGaussWyniki[n - 1]) < 1e-12) IntermediateGaussWyniki[n - 1] = 0;
+		}
+		else if(IntermediateMatrixValues[n - 1]==0)
+		{
+			std::cout << "\n\nRozwiazan jest nieskonczenie wiele.\n IntermediateMatrixValues[n - 1]==0  AND  IntermediateMatrix[n - 1][n - 1]==0\n";
 			FreeMatrix(IntermediateMatrix, IntermediateMatrixValues);
 			return;
 		}
+		else if (IntermediateMatrixValues[n - 1] != 0)
+		{
+			std::cout << "\n\nUklad sprzeczny!\n IntermediateMatrixValues[n - 1]!=0  AND  IntermediateMatrix[n - 1][n - 1]==0\n";
+			FreeMatrix(IntermediateMatrix, IntermediateMatrixValues);
+			return;
+		}
+
 		for (int i = n - 2; i >= 0; i--)
 		{
 			for (int k = n - 1; k > i; k--)
@@ -511,7 +557,7 @@ public:
 
 	void AdvancedGauss()
 	{
-		std::cout << "\n\nGauss z PELNYM wyborem Maksymalnego elementu w kolumnie";
+		std::cout << "\n\n\nGauss z PELNYM wyborem Maksymalnego elementu";
 		double **AdvancedMatrix = nullptr;
 		double *AdvancedMatrixValues = nullptr;
 		int* XOrder = (int*)calloc(n, sizeof(int));
@@ -565,13 +611,22 @@ public:
 			AdvancedGaussWyniki[n - 1] = AdvancedMatrixValues[n - 1] / AdvancedMatrix[n - 1][n - 1];
 			if (abs(AdvancedGaussWyniki[n - 1]) < 1e-12) AdvancedGaussWyniki[n - 1] = 0;
 		}
-		else
+		else if(AdvancedMatrixValues[n - 1]==0)
 		{
-			std::cout << "\n\nBlad! Rozwiazania sa sprzeczne lub jest ich nieskonczenie wiele.\n AdvancedMatrixValues[n - 1] / AdvancedMatrix[n - 1][n - 1]==0\n";
+			std::cout << "\n\nRozwiazan jest nieskonczenie wiele.\n AdvancedMatrixValues[n - 1]==0 AND AdvancedMatrix[n - 1][n - 1]==0\n";
 			FreeMatrix(AdvancedMatrix, AdvancedMatrixValues);
 			free(XOrder);
 			return;
 		}
+		else if (AdvancedMatrixValues[n - 1] != 0)
+		{
+			std::cout << "\n\nUklad sprzeczny!\n AdvancedMatrixValues[n - 1]!=0  AND AdvancedMatrix[n - 1][n - 1]==0\n";
+			FreeMatrix(AdvancedMatrix, AdvancedMatrixValues);
+			free(XOrder);
+			return;
+		}
+
+		
 		if (abs(AdvancedGaussWyniki[n - 1]) < 1e-12) AdvancedGaussWyniki[n - 1] = 0;
 		for (int i = n - 2; i >= 0; i--)
 		{
@@ -605,14 +660,42 @@ public:
 
 int main()
 {
-	GaussElimination matrix;
-	matrix.BasicGaussElimination();
-	matrix.IntermediateGauss();
-	matrix.AdvancedGauss();
+	std::cout << "Program rozwiazuje rownania Metoda Eliminacji Gaussa.\n";
+	std::cout << "Wybierz metode wprowadzania macierzy:\n1.Wlasna macierz\n2.Zestaw testowy\nWybor:";
+	int wybor;
+	std::cin >> wybor;
+	if ((wybor != 1) && (wybor != 2))
+	{
+		std::cout << "Blad! Nie dokonano poprawnego wyboru.\n";
+		system("pause");
+		exit(0);
+	}
+	GaussElimination matrix(wybor);
+	std::cout << "1.Podstawowy Gauss (bez wyboru)\n2.Gauss z wyborem maksymalnego elementu w kolumnie\n3.Gauss z Pelnym wyborem maksymalnego elementu\n4.Wszystkie\nWybor: ";
+	std::cin >> wybor;
+	system("cls");
+	switch (wybor)
+	{
+	case 1:
+		
+		matrix.BasicGaussElimination();
+		break;
+	case 2:
+		matrix.IntermediateGauss();
+		break;
+	case 3:
+		matrix.AdvancedGauss();
+		break;
+	case 4:
+		matrix.BasicGaussElimination();
+		matrix.IntermediateGauss();
+		matrix.AdvancedGauss();
+		break;
+	default:
+		std::cout << "\nNie dokonano poprawnego wyboru.\n";
 
-
-
-
+	}
+	
 	std::cout << "\n\n";
 	system("pause");
 	return 0;
