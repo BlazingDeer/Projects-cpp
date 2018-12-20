@@ -267,7 +267,6 @@ public:
 			TempMatrixValues[przekatna] = TempMatrixValues[MaxElementVerticalIndex];
 			TempMatrixValues[MaxElementVerticalIndex] = CopyValue;
 		}
-		ShowMatrix(TempMatrix, TempMatrixValues);
 
 	}
 
