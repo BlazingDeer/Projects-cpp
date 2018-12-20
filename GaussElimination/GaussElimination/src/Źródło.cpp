@@ -323,7 +323,7 @@ public:
 
 	void EnterMatrix()
 	{
-		std::cout << "\n\nUWAGA! Najpierw wprowadzamy wiersze macierzy ze zmiennymi(X) a na koniec oddzielnie macierz Y dla poszczegolnego wiersza\nPrzyklad: X1 + X2 + X3 = Y\n";
+		std::cout << "\n\nUWAGA! Najpierw wprowadzamy wiersze macierzy ze zmiennymi(X) a na koniec oddzielnie macierz Y(wyrazow wolnych)\nPrzyklad: X1 + X2 + X3 = Y\n";
 		int count = 0;
 		for (int i = 0; i < n; ++i)
 		{
@@ -336,7 +336,7 @@ public:
 			++count;
 		}
 
-		std::cout << "\nwprowadz macierz Y:\n" ;
+		std::cout << "\nwprowadz macierz Y(wyrazow wolnych):\n" ;
 		for (int i=0;i<n;i++)
 		{
 			
