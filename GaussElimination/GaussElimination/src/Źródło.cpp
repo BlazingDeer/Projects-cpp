@@ -240,39 +240,39 @@ public:
 
 	void MaxColumnSwap(double**& TempMatrix, double*& TempMatrixValues, int przekatna)
 	{
-		double MaxElement= TempMatrix[przekatna][przekatna];
+		double MaxElement= abs(TempMatrix[przekatna][przekatna]);
 		int MaxElementVerticalIndex=przekatna;
 
-		for (int i = przekatna; i < n; i++)
+		for (int i = przekatna+1; i < n; i++)
 		{
 			if (abs(TempMatrix[i][przekatna]) > MaxElement)
 			{
-				MaxElement = TempMatrix[i][przekatna];
+				MaxElement = abs(TempMatrix[i][przekatna]);
 				MaxElementVerticalIndex = i;
 			}
 		}
-
-		for (int i = 0; i < n; i++)
+		if (MaxElementVerticalIndex != przekatna)
 		{
-			double CopyLine;
-			CopyLine = TempMatrix[przekatna][i];
-			TempMatrix[przekatna][i] = TempMatrix[MaxElementVerticalIndex][i];
-			TempMatrix[MaxElementVerticalIndex][i] = CopyLine;
+			for (int i = 0; i < n; i++)
+			{
+				double CopyLine;
+				CopyLine = TempMatrix[przekatna][i];
+				TempMatrix[przekatna][i] = TempMatrix[MaxElementVerticalIndex][i];
+				TempMatrix[MaxElementVerticalIndex][i] = CopyLine;
 
+			}
+
+			double CopyValue;
+			CopyValue = TempMatrixValues[przekatna];
+			TempMatrixValues[przekatna] = TempMatrixValues[MaxElementVerticalIndex];
+			TempMatrixValues[MaxElementVerticalIndex] = CopyValue;
 		}
-
-		double CopyValue;
-		CopyValue = TempMatrixValues[przekatna];
-		TempMatrixValues[przekatna] = TempMatrixValues[MaxElementVerticalIndex];
-		TempMatrixValues[MaxElementVerticalIndex] = CopyValue;
-
-
 
 	}
 
 	void MaxMatrixSwap(double**& TempMatrix, double*& TempMatrixValues, int*& XOrder, int przekatna)
 	{
-		double MaxElement = TempMatrix[przekatna][przekatna];
+		double MaxElement = abs(TempMatrix[przekatna][przekatna]);
 		int MaxElementVerticalIndex = przekatna;
 		int MaxElementHorizontalIndex = przekatna;
 
@@ -282,14 +282,14 @@ public:
 			{
 				if (abs(TempMatrix[i][k]) > MaxElement)
 				{
-					MaxElement = TempMatrix[i][k];
+					MaxElement = abs(TempMatrix[i][k]);
 					MaxElementVerticalIndex = i;
 					MaxElementHorizontalIndex = k;
 				}
 			}
 			
 		}
-
+		
 		for (int i = 0; i < n; i++) //Zamiana Wierszy
 		{
 			double CopyLine;
