@@ -8,7 +8,7 @@
 
 
 
-class Choleski
+class Householder
 {
 private:
 	int n;
@@ -21,14 +21,14 @@ public:
 
 	//Z pdf
 	std::vector<std::vector<double>> zt1{ {1,-2,3,1},{-2,5,-8,1},{3,-8,17,-7},{1,1,-7,18} };
-	std::vector<double> zt1wyniki{ 1,-1,3,-4};
+	std::vector<double> zt1wyniki{ 1,-1,3,-4 };
 
 
 
 
 
 
-	Choleski(int wybor)
+	Householder(int wybor)
 	{
 		switch (wybor)
 		{
@@ -50,7 +50,7 @@ public:
 		}
 	}
 
-	Choleski()
+	Householder()
 	{
 		n = 0;
 		CreateFirst();
@@ -61,7 +61,7 @@ public:
 
 
 
-	~Choleski()
+	~Householder()
 	{
 
 		for (int i = 0; i < n; i++)
@@ -77,7 +77,7 @@ public:
 	{
 		system("cls");
 		std::cout << "\n\nWybierz zestaw:\n";
-	
+
 		std::cout << "\nPRZYKLAD Z PDF\n";
 		std::cout << "\n\nZestaw 1\n";
 		VectorShowMatrix(zt1, zt1wyniki);
@@ -172,7 +172,7 @@ public:
 		}
 	}
 
-	
+
 
 	void EnterMatrix()
 	{
@@ -241,7 +241,7 @@ public:
 	{
 		double** CopyTranspose = nullptr;
 		CreateMatrix(CopyTranspose);
-		for(int i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 		{
 			for (int k = 0; k < n; k++)
 			{
@@ -249,7 +249,7 @@ public:
 			}
 		}
 
-		for(int i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 		{
 			for (int k = 0; k < n; k++)
 			{
@@ -263,7 +263,7 @@ public:
 	bool MacierzDT(int wymiar, double** AMatrix, double**& LMatrix)
 	{
 		bool EndV = false;
-		
+
 		for (int i = 0; i < wymiar; i++)
 		{
 			if (AMatrix[i][i] == 0)
@@ -304,7 +304,7 @@ public:
 
 
 		}
-		
+
 		return EndV;
 
 	}
@@ -329,7 +329,7 @@ public:
 		else if (LMatrixValues[0] == 0)
 		{
 			std::cout << "\n\nRozwiazan jest nieskonczenie wiele.\n (Y)LMatrixValues[0]==0 AND LMatrix[0][0]==0\n";
-			
+
 			EndV = true;
 			return EndV;
 		}
@@ -430,8 +430,8 @@ public:
 		bool EndV = false;
 		CreateMatrixAndValues(LMatrix, LMatrixValues);
 
-		
-	
+
+
 
 		EndV = MacierzDT(n, matrix, LMatrix);
 		if (EndV)
@@ -440,8 +440,8 @@ public:
 			return;
 		}
 
-		
-		EndV=RozwiazanieDT(n, LMatrix, matrixValues, LMatrixValues);
+
+		EndV = RozwiazanieDT(n, LMatrix, matrixValues, LMatrixValues);
 		if (EndV)
 		{
 			FreeMatrixAndValues(LMatrix, LMatrixValues);
@@ -451,7 +451,7 @@ public:
 		MatrixTranspose(LMatrix);
 
 
-		EndV=RozwiazanieGT(n, LMatrix, nullptr, LMatrixValues);
+		EndV = RozwiazanieGT(n, LMatrix, nullptr, LMatrixValues);
 		if (EndV)
 		{
 			FreeMatrixAndValues(LMatrix, LMatrixValues);
@@ -462,7 +462,7 @@ public:
 		FreeMatrixAndValues(LMatrix, LMatrixValues);
 
 	}
-	
+
 
 
 };
@@ -471,7 +471,7 @@ public:
 
 int main()
 {
-	std::cout << "Program rozwiazuje rownania przy pomocy rozkladu Choleskiego.\n";
+	std::cout << "Program rozwiazuje rownania przy pomocy metody Householdera.\n";
 	std::cout << "Wybierz metode wprowadzania macierzy:\n1.Wlasna macierz\n2.Zestaw testowy\nWybor:";
 	int wybor;
 	std::cin >> wybor;
@@ -481,7 +481,7 @@ int main()
 		system("pause");
 		exit(0);
 	}
-	Choleski matrix(wybor);
+	Householder matrix(wybor);
 	matrix.Calc();
 
 
