@@ -138,14 +138,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AndQuery.cpp" />
+    <ClCompile Include="src\BinaryQuery.cpp" />
+    <ClCompile Include="src\NotQuery.cpp" />
+    <ClCompile Include="src\OrQuery.cpp" />
+    <ClCompile Include="src\Query.cpp" />
     <ClCompile Include="src\QueryResult.cpp" />
     <ClCompile Include="src\source.cpp" />
     <ClCompile Include="src\TextQuery.cpp" />
+    <ClCompile Include="src\WordQuery.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AndQuery.h" />
+    <ClInclude Include="src\BinaryQuery.h" />
+    <ClInclude Include="src\NotQuery.h" />
+    <ClInclude Include="src\OrQuery.h" />
+    <ClInclude Include="src\Query.h" />
     <ClInclude Include="src\QueryResult.h" />
     <ClInclude Include="src\Query_base.h" />
     <ClInclude Include="src\TextQuery.h" />
+    <ClInclude Include="src\WordQuery.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

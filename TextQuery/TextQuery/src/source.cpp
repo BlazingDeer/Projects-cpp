@@ -6,8 +6,11 @@
 #include <map>
 #include <set>
 #include <sstream>
-#include "QueryResult.h"
-#include "TextQuery.h"
+
+#include "Query.h"
+#include "OrQuery.h"
+#include "AndQuery.h"
+#include "NotQuery.h"
 
 
 

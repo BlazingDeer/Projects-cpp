@@ -22,5 +22,9 @@ private:
 public:
 	QueryResult(std::string word, std::shared_ptr<std::set<line_no>> lineNumbers, std::shared_ptr<std::vector<std::string>> file);
 
+	std::set<QueryResult::line_no>::iterator end();
+	std::set<QueryResult::line_no>::iterator begin();
+	std::shared_ptr<std::vector<std::string>> get_file();
+
 
 };
